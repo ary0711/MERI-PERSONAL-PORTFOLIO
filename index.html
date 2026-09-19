@@ -297,30 +297,52 @@
   @media (max-width:560px){.project{grid-template-columns:1fr}}
 
   /* ---------- contact ---------- */
-  .contact-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:56px}
+  .contact-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:56px;align-items:start}
   @media (max-width:760px){.contact-grid{grid-template-columns:1fr;gap:34px}}
-  .detail{margin:0 0 18px}
-  .detail span{display:block;font-size:14px;color:var(--muted)}
-  .detail a{color:var(--text);text-decoration:none;border-bottom:1px solid var(--line)}
-  .detail a:hover{border-bottom-color:var(--lilac);color:var(--lilac)}
-  form{display:grid;gap:16px}
-  label{font-size:14px;color:var(--muted);display:block;margin-bottom:6px}
-  input,textarea{
-    width:100%;font:inherit;font-size:16px;color:var(--text);
-    background:var(--plum-800);border:1px solid var(--line);border-radius:10px;padding:12px 14px;
-    transition:border-color .2s ease;
+
+  .status-badge{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:var(--mono);font-size:13px;color:var(--mint);
+    background:rgba(47,230,184,.1);border:1px solid rgba(47,230,184,.35);
+    border-radius:999px;padding:8px 16px;margin-bottom:22px;
   }
-  input:focus,textarea:focus{border-color:var(--sky)}
-  textarea{min-height:130px;resize:vertical}
-  input::placeholder,textarea::placeholder{color:#5C7096}
-  form button{
-    justify-self:start;font:inherit;font-size:15px;font-weight:500;cursor:pointer;
-    padding:13px 28px;border-radius:999px;border:1px solid var(--amber);background:var(--amber);color:#0A1220;
-    transition:transform .15s ease, box-shadow .15s ease;
+  .status-dot{width:8px;height:8px;border-radius:50%;background:var(--mint);animation:statusPulse 2s ease-in-out infinite}
+  @keyframes statusPulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(47,230,184,.5)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(47,230,184,0)}}
+  @media (prefers-reduced-motion:reduce){ .status-dot{animation:none} }
+  .contact-intro p{color:var(--muted);max-width:44ch;margin:0 0 26px}
+
+  .contact-cards{display:flex;flex-direction:column;gap:12px}
+  .contact-card{
+    display:flex;align-items:center;gap:16px;
+    padding:16px 18px;border-radius:14px;
+    border:1px solid var(--line);background:var(--plum-800);
+    text-decoration:none;color:var(--text);
+    transition:transform .2s ease, border-color .2s ease, background .2s ease;
   }
-  form button:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,193,69,.35)}
-  .note{font-size:14px;color:var(--muted);margin:0}
+  .contact-card:not(.static):hover{transform:translateX(6px);background:var(--plum-700)}
+  .contact-card.static{cursor:default}
+  .cc-icon{
+    flex:none;width:42px;height:42px;border-radius:11px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--plum-700);
+  }
+  .cc-icon svg{width:20px;height:20px;fill:currentColor}
+  .cc-1 .cc-icon,.cc-1:hover{border-color:var(--sky)}
+  .cc-1 .cc-icon{color:var(--sky)}
+  .cc-2 .cc-icon,.cc-2:hover{border-color:var(--coral)}
+  .cc-2 .cc-icon{color:var(--coral)}
+  .cc-3 .cc-icon,.cc-3:hover{border-color:var(--lilac)}
+  .cc-3 .cc-icon{color:var(--lilac)}
+  .cc-4 .cc-icon,.cc-4:hover{border-color:var(--amber)}
+  .cc-4 .cc-icon{color:var(--amber)}
+  .cc-5 .cc-icon{color:var(--mint)}
+  .cc-text{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .cc-label{font-family:var(--mono);font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+  .cc-value{font-size:15px;font-weight:500;overflow-wrap:anywhere}
+  @media (hover:none){ .contact-card:hover{transform:none} }
+
   footer{border-top:1px solid var(--line);padding:30px 0 40px;color:var(--muted);font-size:14px}
+
 
   /* =====================================================
      MOBILE RESPONSIVENESS
@@ -391,6 +413,10 @@
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <symbol id="ghmark" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol>
+  <symbol id="ic-mail" viewBox="0 0 24 24"><path d="M3 5h18a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1zm1.4 2L12 12.5 19.6 7H4.4zM20 8.4l-7.4 5.3a1 1 0 01-1.2 0L4 8.4V17h16V8.4z"/></symbol>
+  <symbol id="ic-phone" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2a1 1 0 011-.25c1.1.36 2.3.56 3.6.56a1 1 0 011 1V20a1 1 0 01-1 1C10.6 21 3 13.4 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.3.2 2.5.56 3.6a1 1 0 01-.25 1L6.6 10.8z"/></symbol>
+  <symbol id="ic-linkedin" viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 11.02 5 2.5 2.5 0 01-.02-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05C21.8 8.65 23 11 23 14.6V21h-4v-5.7c0-1.36-.03-3.1-1.9-3.1-1.9 0-2.2 1.48-2.2 3v5.8h-4V9z"/></symbol>
+  <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 2c-4.2 0-7.5 3.3-7.5 7.5 0 5.6 6.6 11.7 6.9 12 .3.3.9.3 1.2 0 .3-.3 6.9-6.4 6.9-12C19.5 5.3 16.2 2 12 2zm0 10.2a2.7 2.7 0 110-5.4 2.7 2.7 0 010 5.4z"/></symbol>
 </svg>
 
 <div id="loader" aria-hidden="true">
@@ -461,9 +487,9 @@
       <h2 class="enter d1">About me</h2>
       <div class="two">
         <div class="enter d2">
-          <p>I’m Mary Rose Pogoy, a BS Information Technology graduate with a strong interest in web development and problem-solving. I enjoy figuring out complicated technical problems and turning ideas into functional, user-friendly systems.
-I have experience working on web-based applications, database-driven systems, and academic projects that involve both frontend and backend development. I’m comfortable learning new technologies, troubleshooting issues, and working with a team to turn requirements into working solutions.
-I’m always curious about how things work, especially when it comes to technology. I enjoy challenges that push me to think critically, improve my skills, and find better ways to solve problems. </p>
+          <p>I'm Mary Rose Pogoy, a BS Information Technology graduate with a strong interest in web development and problem-solving. I enjoy figuring out complicated technical problems and turning ideas into functional, user-friendly systems.
+I have experience working on web-based applications, database-driven systems, and academic projects that involve both frontend and backend development. I'm comfortable learning new technologies, troubleshooting issues, and working with a team to turn requirements into working solutions.
+I'm always curious about how things work, especially when it comes to technology. I enjoy challenges that push me to think critically, improve my skills, and find better ways to solve problems. </p>
         </div>
         <div class="enter d3">
           <h3>Education</h3>
@@ -539,31 +565,35 @@ I’m always curious about how things work, especially when it comes to technolo
   <!-- CONTACT -->
   <section id="page-contact" class="page">
     <div class="wrap inner">
-      <h2 class="enter d1">Get in touch</h2>
+      <h2 class="enter d1">Let's work together</h2>
       <div class="contact-grid">
-        <div class="enter d2">
-          <p class="detail"><span>Email</span><a id="emailLink" href="mailto:marypgoy@gmail.com">marypgoy@gmail.com</a></p>
-          <p class="detail"><span>Phone</span><a href="tel:+639275649776">+63 927 564 9776</a></p>
-          <p class="detail"><span>LinkedIn</span><a href="https://www.linkedin.com/in/mary-rose-pogoy-835740437/" target="_blank" rel="noopener">linkedin.com/in/mary-rose-pogoy</a></p>
-          <p class="detail"><span>GitHub</span><a href="https://github.com/ary0711" target="_blank" rel="noopener">github.com/ary0711</a></p>
-          <p class="detail"><span>Location</span>Balud, Dalaguete, Cebu</p>
+        <div class="contact-intro enter d2">
+          <span class="status-badge"><span class="status-dot"></span>Available for internships &amp; entry-level roles</span>
+          <p>I'm currently looking for opportunities where I can grow as a developer and contribute to real projects. Whether you have a role in mind, a project to discuss, or just want to connect — feel free to reach out.</p>
+          <a class="btn" href="mailto:marypgoy@gmail.com">Email me directly</a>
         </div>
-        <form id="contactForm" class="enter d3">
-          <div>
-            <label for="name">Your name</label>
-            <input id="name" name="name" type="text" placeholder="Juan dela Cruz" required>
+        <div class="contact-cards enter d3">
+          <a class="contact-card cc-1" id="emailLink" href="mailto:marypgoy@gmail.com">
+            <span class="cc-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><use href="#ic-mail"/></svg></span>
+            <span class="cc-text"><span class="cc-label">Email</span><span class="cc-value">marypgoy@gmail.com</span></span>
+          </a>
+          <a class="contact-card cc-2" href="tel:+639275649776">
+            <span class="cc-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><use href="#ic-phone"/></svg></span>
+            <span class="cc-text"><span class="cc-label">Phone</span><span class="cc-value">+63 927 564 9776</span></span>
+          </a>
+          <a class="contact-card cc-3" href="https://www.linkedin.com/in/mary-rose-pogoy-835740437/" target="_blank" rel="noopener" data-ext>
+            <span class="cc-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><use href="#ic-linkedin"/></svg></span>
+            <span class="cc-text"><span class="cc-label">LinkedIn</span><span class="cc-value">mary-rose-pogoy</span></span>
+          </a>
+          <a class="contact-card cc-4" href="https://github.com/ary0711" target="_blank" rel="noopener" data-ext>
+            <span class="cc-icon"><svg aria-hidden="true" viewBox="0 0 16 16"><use href="#ghmark"/></svg></span>
+            <span class="cc-text"><span class="cc-label">GitHub</span><span class="cc-value">ary0711</span></span>
+          </a>
+          <div class="contact-card cc-5 static">
+            <span class="cc-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><use href="#ic-pin"/></svg></span>
+            <span class="cc-text"><span class="cc-label">Location</span><span class="cc-value">Balud, Dalaguete, Cebu</span></span>
           </div>
-          <div>
-            <label for="email">Your email</label>
-            <input id="email" name="email" type="email" placeholder="juan@email.com" required>
-          </div>
-          <div>
-            <label for="message">Message</label>
-            <textarea id="message" name="message" placeholder="Hi! I'd like to talk about…" required></textarea>
-          </div>
-          <button type="submit">Send message</button>
-          <p class="note" id="formNote">This opens your email app with the message ready to send.</p>
-        </form>
+        </div>
       </div>
     </div>
   </section>
@@ -718,7 +748,7 @@ I’m always curious about how things work, especially when it comes to technolo
     });
   })();
 
-  /* external links (GitHub): open in a new tab; if the browser blocks that, open in the same tab */
+  /* external links (GitHub, LinkedIn): open in a new tab; if the browser blocks that, open in the same tab */
   document.querySelectorAll('a[data-ext]').forEach(function (a) {
     a.addEventListener('click', function (e) {
       e.preventDefault();
@@ -726,25 +756,6 @@ I’m always curious about how things work, especially when it comes to technolo
       if (w) { try { w.opener = null; } catch (err) {} }
       else { window.location.href = a.href; }
     });
-  });
-
-  var form = document.getElementById('contactForm');
-  var note = document.getElementById('formNote');
-  var myEmail = (document.getElementById('emailLink').getAttribute('href') || '').replace('mailto:', '');
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var name = document.getElementById('name').value.trim();
-    var email = document.getElementById('email').value.trim();
-    var message = document.getElementById('message').value.trim();
-    if (!name || !email || !message) return;
-
-    var subject = 'Portfolio message from ' + name;
-    var body = message + '\n\n—\n' + name + '\n' + email;
-    var href = 'mailto:' + myEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-
-    note.textContent = 'Opening your email app. If nothing happens, email ' + myEmail + ' directly.';
-    window.location.href = href;
   });
 </script>
 
