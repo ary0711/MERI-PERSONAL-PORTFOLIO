@@ -57,28 +57,11 @@
   .brand{font-family:var(--serif);font-weight:700;font-size:19px;letter-spacing:-.6px;text-decoration:none;white-space:nowrap;background:none;border:none;color:var(--text);cursor:pointer;padding:0}
   .brand span{color:var(--amber)}
   .nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0}
-  .nav a.link{text-decoration:none;color:var(--muted);font-size:15px;padding:4px 0;border-bottom:2px solid transparent;cursor:pointer;transition:color .2s ease, border-color .2s ease}
-  .nav a.link:hover,.nav a.link:focus-visible{color:var(--text);border-bottom-color:var(--coral)}
-  .nav a.link.active{color:var(--text);border-bottom-color:var(--sky)}
+  .nav nav{position:relative}
+  .nav a.link{text-decoration:none;color:var(--muted);font-size:15px;padding:4px 0;cursor:pointer;transition:color .2s ease}
+  .nav a.link:hover,.nav a.link:focus-visible,.nav a.link.active{color:var(--text)}
+  #navLine{position:absolute;bottom:-2px;left:0;height:2px;width:0;background:var(--sky);border-radius:2px;transition:transform .3s cubic-bezier(.4,0,.2,1), width .3s cubic-bezier(.4,0,.2,1);pointer-events:none}
   @media (max-width:680px){ .nav ul{gap:14px} .nav a.link{font-size:13px} }
-
-  /* ---------- curtain page transition ---------- */
-  #curtain{position:fixed;inset:0;z-index:9997;pointer-events:none}
-  .curtain-bar{
-    position:absolute;top:0;bottom:0;width:25%;
-    transform:translateY(-100%);
-    transition:transform .5s cubic-bezier(.76,0,.24,1);
-  }
-  .curtain-bar:nth-child(1){left:0%;background:var(--coral);transition-delay:0s}
-  .curtain-bar:nth-child(2){left:25%;background:var(--amber);transition-delay:.06s}
-  .curtain-bar:nth-child(3){left:50%;background:var(--sky);transition-delay:.12s}
-  .curtain-bar:nth-child(4){left:75%;background:var(--mint);transition-delay:.18s}
-  #curtain.cover .curtain-bar{transform:translateY(0)}
-  #curtain.exit .curtain-bar{transform:translateY(100%)}
-  #curtain.notransition .curtain-bar{transition:none!important}
-  @media (prefers-reduced-motion:reduce){
-    .curtain-bar{transition:none!important}
-  }
 
   /* ---------- loader ---------- */
   #loader{
@@ -107,32 +90,18 @@
     .loader-dots span{animation:none}
   }
 
-  #flash{
-    position:fixed;inset:0;z-index:9998;
-    background:#fff;opacity:0;pointer-events:none;
-  }
-  #flash.flash-active{animation:flashPulse .6s ease forwards}
-  @keyframes flashPulse{
-    0%{opacity:0}
-    12%{opacity:.9}
-    100%{opacity:0}
-  }
-  @media (prefers-reduced-motion:reduce){
-    #flash{display:none}
-  }
-
   /* ---------- pages ---------- */
   main{min-height:calc(100vh - 64px - 90px)}
   .page{display:none}
   .page.active{display:block}
 
-  .enter{opacity:0;transform:translateY(26px);transition:opacity .6s cubic-bezier(.16,.8,.3,1), transform .6s cubic-bezier(.16,.8,.3,1)}
+  .enter{opacity:0;transform:translateY(14px);transition:opacity .3s ease, transform .3s ease}
   .page.active .enter{opacity:1;transform:translateY(0)}
-  .d1{transition-delay:.05s}
-  .d2{transition-delay:.15s}
-  .d3{transition-delay:.25s}
-  .d4{transition-delay:.35s}
-  .d5{transition-delay:.45s}
+  .d1{transition-delay:0s}
+  .d2{transition-delay:.04s}
+  .d3{transition-delay:.08s}
+  .d4{transition-delay:.12s}
+  .d5{transition-delay:.16s}
   @media (prefers-reduced-motion:reduce){
     .enter{opacity:1;transform:none;transition:none}
   }
@@ -424,10 +393,6 @@
   <div class="loader-mark">Meri<span>.</span></div>
   <div class="loader-dots"><span></span><span></span><span></span></div>
 </div>
-<div id="flash" aria-hidden="true"></div>
-<div id="curtain" aria-hidden="true">
-  <div class="curtain-bar"></div><div class="curtain-bar"></div><div class="curtain-bar"></div><div class="curtain-bar"></div>
-</div>
 
 <header>
   <div class="wrap nav">
@@ -440,6 +405,7 @@
         <li><a class="link" href="#projects" data-page="projects">Projects</a></li>
         <li><a class="link" href="#contact" data-page="contact">Contact</a></li>
       </ul>
+      <span id="navLine"></span>
     </nav>
   </div>
 </header>
@@ -461,8 +427,6 @@
         </div>
         <div class="chip-row enter d5">
           <span class="mini-chip">💻 Web Dev</span>
-          <span class="mini-chip">🎓 IT Graduate</span>
-          <span class="mini-chip">🐾 Team Player</span>
           <span class="mini-chip">🚀 Always learning</span>
         </div>
       </div>
@@ -610,18 +574,28 @@ I'm always curious about how things work, especially when it comes to technology
 
   var PAGES = ['home','about','skills','projects','contact'];
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var curtain = document.getElementById('curtain');
   var currentPage = 'home';
-  var busy = false;
 
   var pageEls = {};
   PAGES.forEach(function (p) { pageEls[p] = document.getElementById('page-' + p); });
   var navLinks = document.querySelectorAll('[data-page]');
 
+  function moveLine() {
+    var line = document.getElementById('navLine');
+    var a = document.querySelector('.nav a.link.active');
+    if (!line || !a) return;
+    var nav = a.closest('nav').getBoundingClientRect();
+    var r = a.getBoundingClientRect();
+    line.style.width = r.width + 'px';
+    line.style.transform = 'translateX(' + (r.left - nav.left) + 'px)';
+  }
+  window.addEventListener('resize', moveLine);
+
   function setNavActive(name) {
     navLinks.forEach(function (el) {
       if (el.tagName === 'A') el.classList.toggle('active', el.getAttribute('data-page') === name);
     });
+    moveLine();
   }
 
   function typeRole(text) {
@@ -658,27 +632,10 @@ I'm always curious about how things work, especially when it comes to technology
   }
 
   function navigate(name) {
-    if (!PAGES.includes(name) || busy || name === currentPage) {
-      if (name === currentPage) window.scrollTo(0, 0);
-      return;
-    }
+    if (!PAGES.includes(name)) return;
+    if (name === currentPage) { window.scrollTo(0, 0); return; }
     if (window.location.hash !== '#' + name) window.location.hash = name;
-    if (reduced) { showPage(name); return; }
-    busy = true;
-    curtain.classList.remove('exit');
-    curtain.classList.add('cover');
-    setTimeout(function () {
-      showPage(name);
-      curtain.classList.remove('cover');
-      curtain.classList.add('exit');
-      setTimeout(function () {
-        curtain.classList.add('notransition');
-        curtain.classList.remove('exit');
-        void curtain.offsetWidth;
-        curtain.classList.remove('notransition');
-        busy = false;
-      }, 550);
-    }, 700);
+    showPage(name);
   }
 
   navLinks.forEach(function (el) {
@@ -695,7 +652,6 @@ I'm always curious about how things work, especially when it comes to technology
 
   (function () {
     var loader = document.getElementById('loader');
-    var flash = document.getElementById('flash');
     var minShow = reduced ? 0 : 900;
     var start = Date.now();
     var initial = window.location.hash.replace('#', '');
@@ -706,11 +662,9 @@ I'm always curious about how things work, especially when it comes to technology
       var wait = Math.max(0, minShow - elapsed);
       setTimeout(function () {
         loader.classList.add('hide');
-        if (!reduced) flash.classList.add('flash-active');
         showPage(initial);
         setTimeout(function () {
           loader.remove();
-          flash.remove();
         }, reduced ? 0 : 650);
       }, wait);
     }
